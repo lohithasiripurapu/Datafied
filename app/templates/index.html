@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Metrics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header .subtitle {
+            display: block;
+            font-size: 14px;
+            color: #d1e7dd; /* Light color for subtitle */
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            font-size: 28px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .metrics {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .metric-box {
+            flex-basis: 23%;
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .metric-box h3 {
+            font-size: 22px;
+            color: #4CAF50;
+        }
+        .metric-box p {
+            font-size: 20px;
+            color: #333;
+            margin: 10px 0 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr.highlight {
+            background-color: #FFD700;
+        }
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        footer p {
+            margin: 5px 0;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .upload-form {
+            margin-bottom: 20px;
+        }
+        .upload-form input[type="file"] {
+            margin-right: 10px;
+        }
+        /* Base button styles */
+        button, .btn {
+            background-color: #4CAF50; /* Green background */
+            border: none; /* Remove borders */
+            color: white; /* White text */
+            padding: 10px 20px; /* Padding */
+            text-align: center; /* Centered text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Inline-block for better layout control */
+            font-size: 16px; /* Font size */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+        /* Button hover effect */
+        button:hover, .btn:hover {
+            background-color: #45a049; /* Darker green */
+            transform: scale(1.05); /* Slightly enlarge the button */
+        }
+        /* Button active effect */
+        button:active, .btn:active {
+            background-color: #388e3c; /* Even darker green */
+            transform: scale(1); /* Return to normal size */
+        }
+        /* Secondary button style */
+        button.secondary, .btn.secondary {
+            background-color: #f44336; /* Red background */
+        }
+        /* Secondary button hover effect */
+        button.secondary:hover, .btn.secondary:hover {
+            background-color: #c62828; /* Darker red */
+        }
+        /* Tertiary button style */
+        button.tertiary, .btn.tertiary {
+            background-color: #008CBA; /* Blue background */
+        }
+        /* Tertiary button hover effect */
+        button.tertiary:hover, .btn.tertiary:hover {
+            background-color: #007bb5; /* Darker blue */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Datafied <span class="subtitle">Grow with Data</span></h1>
+    <nav>
+        <a>Home</a>
+        <a>Products</a>
+        <a>Metrics</a>
+        <a>Contact Us</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="upload-form">
+        <!-- File Upload Form -->
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" required>
+            <button type="submit">Get Metrics</button>
+        </form>
+    </div>
+
+    <!-- Display Metrics only if category_metrics is available -->
+    {% if category_metrics %}
+    <h2>QuickData Sales Metrics Dashboard</h2>
+    <div class="metrics">
+        <div class="metric-box">
+            <h3>Total Sales</h3>
+            <p>${{ total_sales | round(2) }}</p>
+        </div>
+        <div class="metric-box">
+            <h3>Top-Selling SKU</h3>
+            <p>{{ high_selling_sku }}</p>
+        </div>
+        <div class="metric-box">
+            <h3>Top Category</h3>
+            <p>{{ high_selling_sku_category }}</p>
+        </div>
+        <div class="metric-box">
+            <h3>Units of {{ high_selling_sku }} Sold</h3>
+            <p>{{ max_sku_sales }}</p>
+        </div>
+    </div>
+
+    <!-- Added table for sorted categories -->
+    <h2>Categories Ranked by Total Sales</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Total Sales</th>
+                <th>Quantity Sold</th>
+                <th>Top SKU</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through the passed list and display categories and their metrics -->
+            {% for category, total_sales, total_quantity, top_sku in category_metrics %}
+            <tr>
+                <td>
+                    {{ category }}
+                    {% if loop.index0 == 0 %}
+                        <span style="color: #DAA520; font-size: 1.5em; font-weight: bold;">&#9733;</span>
+                    {% endif %}
+                </td>
+                <td>${{ total_sales | round(2) }}</td>
+                <td>{{ total_quantity }}</td>
+                <td>{{ top_sku }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+<footer>
+    <p>&copy; 2024 Datafied | All Rights Reserved</p>
+    <p>
+        <a>Privacy Policy</a> |
+        <a>Terms of Service</a> |
+        <a>Contact Us</a>
+    </p>
+</footer>
+
+</body>
+</html>

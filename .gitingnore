@@ -1,0 +1,3 @@
+# Ignore upload and processed directories
+uploads/
+processed/
